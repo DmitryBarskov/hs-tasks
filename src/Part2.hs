@@ -8,7 +8,9 @@ import Part2.Types
 -- Написать функцию, которая преобразует значение типа
 -- ColorLetter в символ, равный первой букве значения
 prob6 :: ColorLetter -> Char
-prob6 = error "Implement me!"
+prob6 RED = 'R'
+prob6 GREEN = 'G'
+prob6 BLUE = 'B'
 
 ------------------------------------------------------------
 -- PROBLEM #7
@@ -16,7 +18,10 @@ prob6 = error "Implement me!"
 -- Написать функцию, которая проверяет, что значения
 -- находятся в диапазоне от 0 до 255 (границы входят)
 prob7 :: ColorPart -> Bool
-prob7 = error "Implement me!"
+prob7 = between 0 255 . prob9
+
+between :: Ord a => a -> a -> a -> Bool
+between a b x = a <= x && x <= b
 
 ------------------------------------------------------------
 -- PROBLEM #8
@@ -24,7 +29,11 @@ prob7 = error "Implement me!"
 -- Написать функцию, которая добавляет в соответствующее
 -- поле значения Color значение из ColorPart
 prob8 :: Color -> ColorPart -> Color
-prob8 = error "Implement me!"
+prob8 color colorPart = Color {
+    red = case colorPart of { (Red x) -> x; _ -> red color },
+    green = case colorPart of { (Green x) -> x; _ -> green color },
+    blue = case colorPart of { (Blue x) -> x; _ -> blue color }
+}
 
 ------------------------------------------------------------
 -- PROBLEM #9
@@ -32,7 +41,12 @@ prob8 = error "Implement me!"
 -- Написать функцию, которая возвращает значение из
 -- ColorPart
 prob9 :: ColorPart -> Int
-prob9 = error "Implement me!"
+prob9 = toI
+
+toI :: ColorPart -> Int
+toI (Red x) = x
+toI (Green x) = x
+toI (Blue x) = x
 
 ------------------------------------------------------------
 -- PROBLEM #10
@@ -41,13 +55,21 @@ prob9 = error "Implement me!"
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
 prob10 = error "Implement me!"
+-- prob10 c = [Red (red c), Green (green c), Blue (blue c)]
 
 ------------------------------------------------------------
 -- PROBLEM #11
 --
 -- Найти сумму элементов дерева
 prob11 :: Num a => Tree a -> a
-prob11 = error "Implement me!"
+prob11 tree =
+    root tree +
+    fmap prob11 (left tree) `orElse` 0 +
+    fmap prob11 (right tree) `orElse` 0
+
+orElse :: Maybe a -> a -> a
+orElse (Just x) _ = x
+orElse Nothing x = x
 
 ------------------------------------------------------------
 -- PROBLEM #12
