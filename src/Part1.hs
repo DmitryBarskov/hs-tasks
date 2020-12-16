@@ -15,7 +15,7 @@ module Part1
 --
 -- На вход функции подаются неотрицательные числа
 prob1 :: Int -> Int
-prob1 x = error "Implement me!"
+prob1 x = mod ((+) (3 * x) 123) 65537
 
 
 ------------------------------------------------------------
@@ -25,7 +25,10 @@ prob1 x = error "Implement me!"
 -- * нечётные числа увеличивает втрое и добавляет единицу
 -- * чётные числа делит на два
 prob2 :: Integer -> Integer
-prob2 n = error "Implement me!"
+prob2 n =
+  if odd n
+  then 3 * n + 1
+  else n `div` 2
 
 
 ------------------------------------------------------------
@@ -50,7 +53,8 @@ prob2 n = error "Implement me!"
 --
 -- Для любой функции step и n == 1 ответом будет 0.
 prob3 :: (Integer -> Integer) -> Integer -> Integer
-prob3 step n = error "Implement me!"
+prob3 step 1 = 0
+prob3 step n = 1 + prob3 step (step n)
 
 
 ------------------------------------------------------------
@@ -67,8 +71,17 @@ prob3 step n = error "Implement me!"
 -- равны сумме двух предыдущих.
 --
 -- Число n по модулю не превосходит 10^5
+
+-- -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6  7
+-- -8  5 -3  2 -1  1  0 1 1 2 3 5 8 13 21
 prob4 :: Integer -> Integer
-prob4 n = error "Implement me!"
+prob4 n
+  | n < 0 = prob4 (-n - 2) * (if even n then 1 else -1)
+  | otherwise = prob4iter n 0 1
+
+prob4iter :: Integer -> Integer -> Integer -> Integer
+prob4iter 0 a b = b
+prob4iter i a b = prob4iter (i - 1) b (a + b)
 
 
 ------------------------------------------------------------
@@ -80,4 +93,14 @@ prob4 n = error "Implement me!"
 -- Числа n и k положительны и не превосходят 10^8.
 -- Число 1 не считается простым числом
 prob5 :: Integer -> Integer -> Bool
-prob5 = error "Implement me!"
+prob5 n k = all (< k) (primeDivisors n)
+
+primeDivisors :: Integer -> [Integer]
+primeDivisors x = filter (\p -> x `mod` p == 0) (takeWhile (<= x) primes)
+
+-- https://gist.github.com/ion1/1595983
+primes :: [Integer]
+primes = 2 : filter isPrime [3, 5..]
+
+isPrime :: Integer -> Bool
+isPrime n = all (\p -> n `mod` p /= 0) . takeWhile (\p -> p^2 <= n) $ primes
