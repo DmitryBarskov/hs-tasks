@@ -30,10 +30,16 @@ between a b x = a <= x && x <= b
 -- поле значения Color значение из ColorPart
 prob8 :: Color -> ColorPart -> Color
 prob8 color colorPart = Color {
-    red = case colorPart of { (Red x) -> x; _ -> red color },
-    green = case colorPart of { (Green x) -> x; _ -> green color },
-    blue = case colorPart of { (Blue x) -> x; _ -> blue color }
+    red = red color + componentValue colorPart RED,
+    green = green color + componentValue colorPart GREEN,
+    blue = blue color + componentValue colorPart BLUE
 }
+
+componentValue :: ColorPart -> ColorLetter -> Int
+componentValue (Red x) RED = x
+componentValue (Green x) GREEN = x
+componentValue (Blue x) BLUE = x
+componentValue _ _ = 0
 
 ------------------------------------------------------------
 -- PROBLEM #9
