@@ -60,8 +60,14 @@ toI (Blue x) = x
 -- Написать функцию, которая возвращает компонент Color, у
 -- которого наибольшее значение (если такой единственный)
 prob10 :: Color -> Maybe ColorPart
-prob10 = error "Implement me!"
--- prob10 c = [Red (red c), Green (green c), Blue (blue c)]
+prob10 c = if length maxItems == 1 then Just maxItem else Nothing
+    where
+        components = [Red (red c), Green (green c), Blue (blue c)]
+        maxItem = maximum components
+        maxItems = filter (\x -> compare x maxItem == EQ) components
+
+instance Ord ColorPart where
+    compare a b = compare (toI a) (toI b)
 
 ------------------------------------------------------------
 -- PROBLEM #11
@@ -86,7 +92,16 @@ orElse Nothing x = x
 -- а все элементы правого поддерева -- не меньше элемента
 -- в узле)
 prob12 :: Ord a => Tree a -> Bool
-prob12 = error "Implement me!"
+prob12 (Tree Nothing _ Nothing) = True
+prob12 (Tree (Just l) v Nothing) = all (< v) (flatten l) && prob12 l
+prob12 (Tree Nothing v (Just r)) = all (>= v) (flatten r) && prob12 r
+prob12 (Tree (Just l) v (Just r)) = prob12 (Tree (Just l) v Nothing) && prob12 (Tree Nothing v (Just r))
+
+flatten :: Tree a -> [a]
+flatten (Tree Nothing v Nothing) = [v]
+flatten (Tree (Just l) v Nothing) = flatten l ++ [v]
+flatten (Tree Nothing v (Just r)) = v : flatten r
+flatten (Tree (Just l) v (Just r)) = flatten l ++ v : flatten r
 
 ------------------------------------------------------------
 -- PROBLEM #13
@@ -95,7 +110,14 @@ prob12 = error "Implement me!"
 -- поддерево, в корне которого находится значение, если оно
 -- есть в дереве поиска; если его нет - вернуть Nothing
 prob13 :: Ord a => a -> Tree a -> Maybe (Tree a)
-prob13 = error "Implement me!"
+prob13 v tree = search v (Just tree)
+
+search :: Ord a => a -> Maybe (Tree a) -> Maybe (Tree a)
+search _ Nothing = Nothing
+search value t@(Just (Tree l root r))
+    | value == root = t
+    | value < root = search value l
+    | value > root = search value r
 
 ------------------------------------------------------------
 -- PROBLEM #14

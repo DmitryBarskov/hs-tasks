@@ -39,7 +39,10 @@ prob21 = error "Implement me!"
 -- Подсчитать произведение количеств букв i в словах из
 -- заданной строки (списка символов)
 prob22 :: String -> Integer
-prob22 = error "Implement me!"
+prob22 text = product (map (max 1 . count 'i') (words text))
+
+count :: Eq a => a -> [a] -> Integer
+count item list = fromIntegral (length (filter (== item) list))
 
 ------------------------------------------------------------
 -- PROBLEM #23
@@ -59,7 +62,11 @@ prob23 = error "Implement me!"
 -- представить как сумму чисел от 1 до какого-то K
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
-prob24 = error "Implement me!"
+prob24 num = helper 1 0
+    where helper i probe
+            | probe < num = helper (i + 1) (probe + i)
+            | probe == num = True
+            | probe > num = False
 
 ------------------------------------------------------------
 -- PROBLEM #25
