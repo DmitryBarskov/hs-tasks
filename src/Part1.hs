@@ -6,6 +6,8 @@ module Part1
   , prob5
   ) where
 
+import Part3 (primes)
+
 ------------------------------------------------------------
 -- PROBLEM #1
 --
@@ -97,10 +99,3 @@ prob5 n k = all (< k) (primeDivisors n)
 
 primeDivisors :: Integer -> [Integer]
 primeDivisors x = filter (\p -> x `mod` p == 0) (takeWhile (<= x) primes)
-
--- https://gist.github.com/ion1/1595983
-primes :: [Integer]
-primes = 2 : filter isPrime [3, 5..]
-
-isPrime :: Integer -> Bool
-isPrime n = all (\p -> n `mod` p /= 0) . takeWhile (\p -> p^2 <= n) $ primes

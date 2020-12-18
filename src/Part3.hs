@@ -1,11 +1,17 @@
 module Part3 where
 
+primes :: [Integer]
+primes = 2 : filter isPrime [3, 5..]
+
+isPrime :: Integer -> Bool
+isPrime n = all (\p -> n `mod` p /= 0) (takeWhile (\p -> p * p <= n) primes)
+
 ------------------------------------------------------------
 -- PROBLEM #18
 --
 -- Проверить, является ли число N простым (1 <= N <= 10^9)
 prob18 :: Integer -> Bool
-prob18 = error "Implement me!"
+prob18 = isPrime
 
 ------------------------------------------------------------
 -- PROBLEM #19
