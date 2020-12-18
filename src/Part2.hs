@@ -128,8 +128,6 @@ prob14 :: Tree () -> Tree Int
 prob14 t = case enumerate (Just t) 1 of
     (Just enumerated, _) -> enumerated
 
--- в порядке ПЛК тесты не проходят, но это тесты неправильные
-
 enumerate :: Maybe (Tree ()) -> Int -> (Maybe (Tree Int), Int)
 enumerate Nothing i = (Nothing, i)
 enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
@@ -145,6 +143,7 @@ enumerate (Just (Tree l () r)) i = (Just $ Tree l' current r', current + 1)
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob15 :: Tree a -> Tree a
 prob15 (Tree a p (Just (Tree b q c))) = Tree (Just $ Tree a p b) q c
+prob15 _ = error "Tree has too few nodes to rotate"
 
 ------------------------------------------------------------
 -- PROBLEM #16
@@ -153,6 +152,7 @@ prob15 (Tree a p (Just (Tree b q c))) = Tree (Just $ Tree a p b) q c
 -- (https://en.wikipedia.org/wiki/Tree_rotation)
 prob16 :: Tree a -> Tree a
 prob16 (Tree (Just (Tree a p b)) q c) = Tree a p (Just $ Tree b q c)
+prob16 _ = error "Tree has too few nodes to rotate"
 
 ------------------------------------------------------------
 -- PROBLEM #17

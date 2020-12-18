@@ -1,7 +1,7 @@
 module Part3 where
 
 primes :: [Integer]
-primes = 2 : filter isPrime [3, 5..]
+primes = 2 : filter isPrime [3, 5 ..]
 
 isPrime :: Integer -> Bool
 isPrime n = all (\p -> n `mod` p /= 0) (takeWhile (\p -> p * p <= n) primes)
@@ -20,7 +20,15 @@ prob18 = isPrime
 -- разложении числа N (1 <= N <= 10^9). Простые делители
 -- должны быть расположены по возрастанию
 prob19 :: Integer -> [(Integer, Int)]
-prob19 = error "Implement me!"
+prob19 x = map (\d -> (d, factorize d x)) (primeDivisors x)
+
+primeDivisors :: Integer -> [Integer]
+primeDivisors x = filter (\p -> x `mod` p == 0) (takeWhile (<= x) primes)
+
+factorize :: Integer -> Integer -> Int
+factorize divisor number
+  | number `mod` divisor == 0 = 1 + factorize divisor (number `div` divisor)
+  | otherwise = 0
 
 ------------------------------------------------------------
 -- PROBLEM #20
@@ -59,7 +67,27 @@ count item list = fromIntegral (length (filter (== item) list))
 -- M > 0 и N > 0. Если M > N, то вернуть символы из W в
 -- обратном порядке. Нумерация символов с единицы.
 prob23 :: String -> Maybe String
-prob23 = error "Implement me!"
+prob23 str
+  | n >= len || m >= len = Nothing
+  | m < n = Just (reverse (slice m n))
+  | otherwise = Just (slice n m)
+  where
+    ((n, m), text) = rangeAndText str
+    len = length str
+    slice a b = take (b - a + 1) (drop a text)
+
+rangeAndText :: String -> ((Int, Int), String)
+rangeAndText str = ((read a, read b), text)
+  where
+    (a, b) = splitOn '-' range
+    (range, text) = splitOn ':' str
+
+splitOn :: Char -> String -> (String, String)
+splitOn symbol = iter ""
+  where
+    iter :: String -> String -> (String, String)
+    iter acc "" = error "No such symbol"
+    iter acc (x : xs) = if symbol == x then (reverse acc, xs) else iter (x : acc) xs
 
 ------------------------------------------------------------
 -- PROBLEM #24
@@ -69,10 +97,11 @@ prob23 = error "Implement me!"
 -- (1 <= N <= 10^10)
 prob24 :: Integer -> Bool
 prob24 num = helper 1 0
-    where helper i probe
-            | probe < num = helper (i + 1) (probe + i)
-            | probe == num = True
-            | probe > num = False
+  where
+    helper i probe
+      | probe < num = helper (i + 1) (probe + i)
+      | probe == num = True
+      | probe > num = False
 
 ------------------------------------------------------------
 -- PROBLEM #25
@@ -80,7 +109,16 @@ prob24 num = helper 1 0
 -- Проверить, что запись числа является палиндромом (т.е.
 -- читается одинаково слева направо и справа налево)
 prob25 :: Integer -> Bool
-prob25 = error "Implement me!"
+prob25 = isPalindrome . digits
+
+isPalindrome :: Eq a => [a] -> Bool
+isPalindrome word = word == reverse word
+
+digits :: Integer -> [Int]
+digits = iter []
+  where
+    iter acc 0 = acc
+    iter acc n = iter (fromIntegral (n `mod` 10) : acc) (n `div` 10)
 
 ------------------------------------------------------------
 -- PROBLEM #26
