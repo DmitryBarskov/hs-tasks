@@ -37,7 +37,7 @@ factorize divisor number
 -- Совершенное число равно сумме своих делителей (меньших
 -- самого числа)
 prob20 :: Integer -> Bool
-prob20 = error "Implement me!"
+prob20 n = 2 * n == sum (divisors n)
 
 ------------------------------------------------------------
 -- PROBLEM #21
@@ -45,7 +45,22 @@ prob20 = error "Implement me!"
 -- Вернуть список всех делителей числа N (1<=N<=10^10) в
 -- порядке возрастания
 prob21 :: Integer -> [Integer]
-prob21 = error "Implement me!"
+prob21 = divisors
+
+sqrt' :: Integral a => a -> a
+sqrt' x = round (sqrt (fromIntegral x))
+
+divisors :: Integer -> [Integer]
+divisors n = halfDivisors ++ allDivisors halfDivisors []
+  where
+    allDivisors [] acc = acc
+    allDivisors (x:xs) acc =
+      let a = (n `div` x)
+      in if a == x
+        then allDivisors xs acc
+        else allDivisors xs (a : acc)
+    halfDivisors = filter isDivisor [1..(sqrt' n)]
+    isDivisor candidate = n `mod` candidate == 0
 
 ------------------------------------------------------------
 -- PROBLEM #22
@@ -56,7 +71,7 @@ prob22 :: String -> Integer
 prob22 text = product (map (max 1 . count 'i') (words text))
 
 count :: Eq a => a -> [a] -> Integer
-count item list = fromIntegral (length (filter (== item) list))
+count item = fromIntegral . length . filter (== item)
 
 ------------------------------------------------------------
 -- PROBLEM #23
@@ -127,7 +142,7 @@ digits = iter []
 -- сумма делителей одного (без учёта самого числа) равна
 -- другому, и наоборот
 prob26 :: Integer -> Integer -> Bool
-prob26 = error "Implement me!"
+prob26 a b = sum (divisors a) == a + b && sum (divisors b) == a + b
 
 ------------------------------------------------------------
 -- PROBLEM #27
