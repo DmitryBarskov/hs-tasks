@@ -78,6 +78,7 @@ prob3 step n = 1 + prob3 step (step n)
 -- -8  5 -3  2 -1  1  0 1 1 2 3 5 8 13 21
 prob4 :: Integer -> Integer
 prob4 n
+  | n == (-1) = 0
   | n < 0 = prob4 (-n - 2) * (if even n then 1 else -1)
   | otherwise = prob4iter n 0 1
 
